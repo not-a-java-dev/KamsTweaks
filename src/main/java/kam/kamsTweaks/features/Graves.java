@@ -534,6 +534,18 @@ public class Graves extends Feature {
             return false;
         }
 
+        private static boolean typeCanGoInGrave(InventoryType type) {
+            return type == InventoryType.ANVIL
+                    || type == InventoryType.CARTOGRAPHY
+                    || type == InventoryType.CRAFTING
+                    || type == InventoryType.LOOM
+                    || type == InventoryType.MERCHANT
+                    || type == InventoryType.SMITHING
+                    || type == InventoryType.STONECUTTER
+                    || type == InventoryType.WORKBENCH
+                    || type == InventoryType.GRINDSTONE;
+        }
+
         public Grave(Player owner, Location location) {
             this.owner = owner;
             this.location = location;
@@ -591,11 +603,13 @@ public class Graves extends Feature {
             }
 
             Inventory topInv = owner.getOpenInventory().getTopInventory();
-            for (int i = 0; i < topInv.getSize(); i++) {
-                ItemStack item = topInv.getItem(i);
-                if (item != null && !slotIsOutput(topInv.getType(), i)) {
-                    inventory.setItem(45+i, item);
-                    topInv.setItem(i, null);
+            if (typeCanGoInGrave(topInv.getType())) {
+                for (int i = 0; i < topInv.getSize(); i++) {
+                    ItemStack item = topInv.getItem(i);
+                    if (item != null && !slotIsOutput(topInv.getType(), i)) {
+                        inventory.setItem(45 + i, item);
+                        topInv.setItem(i, null);
+                    }
                 }
             }
 
